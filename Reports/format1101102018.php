@@ -1,0 +1,714 @@
+<?php 
+require_once('../Connections/dbconnect-m.php');
+
+if(!isset($_SESSION['MM_UserGroup'])) 
+    { 
+        header("location:../logout.php");
+    }
+	
+	?>
+<?php
+$police_tracking->select_db("ftcaaazc_epfts");
+$a='SP';
+$stmt = $police_tracking->prepare("SELECT id,branch_name,city FROM branch_tbl WHERE designation = ?");
+$stmt->bind_param("s", $a);
+$stmt->execute();
+$stmt->store_result();
+if($stmt->num_rows === 0) exit('No rows');
+$stmt->bind_result($id,$branch_name,$city); 
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="robots" content="noindex" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>P-11 | File Tracking & Crime Analysis Application </title>
+<!-- GLOBAL STYLES -->
+<link rel="stylesheet" href="../assets/plugins/bootstrap/css/bootstrap.css" />
+<link rel="stylesheet" href="../assets/css/main.css" />
+<link rel="stylesheet" href="../assets/css/theme.css" />
+<link rel="stylesheet" href="../assets/css/MoneAdmin.css" />
+<link rel="stylesheet" href="../assets/plugins/Font-Awesome/css/font-awesome.css" />
+<link rel="stylesheet" type="text/css" href="../assets/css/autocom.css" />
+<!--END GLOBAL STYLES -->
+
+<!-- PAGE LEVEL STYLES -->
+<link href="../assets/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/plugins/datepicker/css/datepicker.css" />
+<link rel="stylesheet" href="../assets/plugins/validationengine/css/validationEngine.jquery.css" />
+<!-- END PAGE LEVEL  STYLES -->
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+<style media='all'>
+body {
+	font-size:12px;
+}
+.notice_all {
+	min-height:600px;
+	width:900px;
+	margin:0 auto;
+	/*border:dotted 1px #666;*/
+	position:relative;
+}
+#print tr td {
+	vertical-align:top
+}
+</style>
+<style media='print'>
+.navStuff {
+	display: none
+}
+.mar10 {
+	margin-top:-10px
+}
+</style>
+</head>
+
+<body>
+<div class="notice_all">
+  <div align='right' class='navStuff'>
+    <form action="exporttoexcel.php" method="post" 
+onsubmit='$("#datatodisplay").val( $("<div>").append( $("#download").eq(0).clone() ).html() )'>  
+<p align="" class="hprtbtn">
+<span style="float:right;margin-right:-25px"> <input type="hidden" id="datatodisplay" name="datatodisplay" style="" /> <input type="submit" value="Export to Excel"/>
+  <input type='button' value='Print this page' onClick='window.print()'>   </span></p></form>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <form action="format11.php" method="post" name="Search" enctype="multipart/form-data" id="popup-validation" role="form">
+              
+        <div class="col-lg-10 navStuff" style="border:1px dashed #555;padding:5px">&nbsp;
+          <label>दिनांक:</label>
+          <input name="datef"  id="dp26" type="text" class="form-control  validate[required] text-input"  autocomplete="off" style="width:130px; display:inline-block" value="<?php echo isset($_POST['datef']) ? $_POST['datef'] : '' ?>" readonly="readonly" />
+          &nbsp;से&nbsp;
+          <label>दिनांक:</label>
+          <input name="datel"  id="dp27" type="text" class="form-control validate[required] text-input"  autocomplete="off" style="width:130px; display:inline-block" value="<?php echo isset($_POST['datel']) ? $_POST['datel'] : '' ?>" readonly="readonly" />
+          &nbsp; तक  &nbsp;&nbsp;
+
+    <select name="sp_office" id="sp_office" class="validate[required] text-input form-control" style="display:inline-block;width:220px;" readonly="readonly">
+    <?php 
+	$stmt_jila = $police_tracking->prepare("SELECT id,branch_name,city FROM branch_tbl where id = ?");
+    $stmt_jila->bind_param("s", $_POST['sp_office']);
+    $stmt_jila->execute();
+    $stmt_jila->store_result();
+    //if($stmt_jila->num_rows === 0) exit('No rows');
+    $stmt_jila->bind_result($branch_id_jila, $branch_name_jila, $city_jila);
+    $stmt_jila->fetch();
+	$stmt_jila->close();
+	$jila = $branch_name_jila.",".$city_jila ;
+    ?>
+	<option value="<?php echo $branch_id_jila ;?>"><?php echo isset($_POST['sp_office']) ? $jila : '' ?></option>    
+	<?php 
+    while ($stmt->fetch()) 
+    {  
+	?>
+    <option value="<?php echo $id; //echo $get_sql_data['id']?>"><?php echo $branch_name; //echo $get_sql_data['branch_name']?>, <?php echo $city; //echo $get_sql_data['city']?></option>
+    <?php
+    }
+    $stmt->close(); //id,branch_name,city FROM branch_tbl close
+    ?>
+    </select>
+                      
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <button type="submit" class="btn btn-success" id="mybutton" name="Search" style="display:inline-block">Search</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <br />
+  <div id="download">
+  <?php
+	if(isset($_POST['Search'])!='')
+    {
+  ?>
+  <p align="left" style="float:left;margin-left:-30px;">Format -11</p>
+  <p align="right"></p>
+  <div class="mar10">
+  <?php
+  //$result1=mysql_query("");
+  //$data1=mysql_fetch_assoc($result1);
+    $stmt1 = $police_tracking->prepare("SELECT id,branch_name,city FROM branch_tbl WHERE id = ?");
+    $stmt1->bind_param("s", $_POST['sp_office']);
+    $stmt1->execute();
+    $stmt1->store_result();
+    if($stmt1->num_rows === 0) exit('No rows');
+    $stmt1->bind_result($branch_id, $branch_name, $city); 
+    while ($stmt1->fetch())
+	{
+  ?>
+    <p align="center"><span>अजा/अजजा की शिकायत पर पंजीबद्ध अपराधों की जानकारी जिनमें अजा/अजजा(अत्याचार-निवारण)अधिनियम 1989 की धारा लगायी गई । <br /> दि <?php if ($_POST['datef'] == ''){	echo '';} else{echo date('d-m-Y', strtotime($_POST['datef']));
+}?> से दि. <?php if ($_POST['datel'] == ''){echo '';} else{echo date('d-m-Y', strtotime($_POST['datel']));}?> इन्दौर जोन</span></p>
+      
+  <?php	  
+  $sc ='SC';
+  $st ='ST';
+  $atyachar ='हाँ';
+  $datef = $_POST['datef'];
+  $date1 = $_POST['datel'];
+  ?>
+  
+<table border="1" cellspacing="0" cellpadding="5" style="font-size:12px;line-height:20px;margin-left:-30px;text-align:center" id="print" width="960px">
+  <tr>
+    <td rowspan="2">क्र.</td>
+    <td rowspan="2" width="120px">अपराध शीर्ष</td>
+    <td colspan="2">कुल प्रकरण</td>
+    <td colspan="2">विवेचना</td>
+    <td colspan="2">बंदी आरोपी</td>
+    <td colspan="2">खात्मा</td>
+    <td colspan="2">खारजी</td>
+    <td colspan="2">न्याया. में प्रस्तुत</td>
+    <td colspan="2">दण्डित</td>
+    <td colspan="2">दोषमुक्त</td>
+    <td colspan="2">न्याया. में लंबित</td>
+    <td colspan="2">विवेचनाधीन</td>
+  </tr>
+  <tr>
+    <td>अजा</td>
+    <td>अजजा</td>
+    <td>अजा</td>
+    <td>अजजा</td>
+    <td>अजा</td>
+    <td>अजजा</td>
+    <td>अजा</td>
+    <td>अजजा</td>
+    <td>अजा</td>
+    <td>अजजा</td>
+    <td>अजा</td>
+    <td>अजजा</td>
+    <td>अजा</td>
+    <td>अजजा</td>
+    <td>अजा</td>
+    <td>अजजा</td>
+    <td>अजा</td>
+    <td>अजजा</td>
+    <td>अजा</td>
+    <td>अजजा</td>
+  </tr>
+  
+  <?php 
+  for ($i=1;$i<=18;$i++)
+  {	 
+  ?>
+  <tr>
+    <td><?php echo $i; ?></td>
+    
+	<td align="left">
+	<?php 
+	if ($i===1) {$j = 1 ; echo " हत्या (302) " ;}
+    elseif ($i===2){ $j = 2 ; echo " हत्या का प्रयास (307) "; }
+	elseif ($i===3){ $j = 3 ; echo " डकेती (395) ";}  
+	elseif ($i===4){ $j = 5 ; echo " लूट (392) ";}
+	elseif ($i===5){ $j = 13 ; echo " अपहरण (363/366) ";}
+	elseif ($i===6){ $j = 12 ; echo " बलात्कार (376) ";}
+	elseif ($i===7){ $j = 44 ; echo " आगजनी (435/436)"; }
+	elseif ($i===8){ $j = 38; echo " गंभीर चोट (325/326) ";} 
+	elseif ($i===9){ $j = 37 ; echo " साधारण चोट (323) ";}
+	elseif ($i===10){ $j = 92 ; echo " जमीन संबंधी (447/448) ";}
+	elseif ($i===11){ $j = 93 ; echo " नुकसान रसानी (427,428,429) ";}
+	elseif ($i===12){ $j = 94 ; echo " चोरी / नकबजनी (380) ";} 
+	elseif ($i===13){ $j = 39 ; echo " शीलभंग (354) ";}
+	elseif ($i===14){ $j = 45 ; echo " गालीगलोच / जान से मारने की धमकी (294,506) ";}
+	elseif ($i===15){ $j = 11 ; echo " बलवा (147/148) ";} 
+	elseif ($i===16){ $j = 95 ; echo " धोखाधड़ी (420) ";}
+	elseif ($i===17){ $j = 96 ; echo " गबन (406/409) ";}
+	elseif ($i===18){ $j = 19 ; echo " अन्य भादवि / अजा / अजजा ( अ. नि.)1989 ";}
+	else { }
+	?>
+	</td>
+    
+	<td>
+	<?php
+ 	$police_dsr->select_db("ftcaaazc_dsr");
+	$stmt2 = $police_dsr->prepare("SELECT COUNT(id) FROM dsr_entries WHERE dsr_vidhan_ipc = ? AND sp_id = ? AND dsr_caste = ? AND (dsr_kaymi_date >= ? and dsr_kaymi_date <= ?) AND atyachar_adhiniyam = ?");
+	$stmt2->bind_param("iissss", $j, $branch_id, $sc, $datef, $date1, $atyachar);
+    $stmt2->execute();
+    $stmt2->store_result();
+    //if($stmt3->num_rows === 0) { echo "No Results"; }
+    $stmt2->bind_result($cid1); 
+    $stmt2->fetch();
+	$ipc[$i]=$cid1;
+	?>
+	<span><?php echo $cid1;?></span>
+	<?php 
+	$stmt2->close();
+	?>
+	</td>
+    
+	<td>
+	<?php
+ 	$police_dsr->select_db("ftcaaazc_dsr");
+	$stmt3 = $police_dsr->prepare("SELECT COUNT(id) FROM dsr_entries WHERE dsr_vidhan_ipc = ? AND sp_id = ? AND dsr_caste = ? AND (dsr_kaymi_date >= ? and dsr_kaymi_date <= ?) AND atyachar_adhiniyam = ?");
+	$stmt3->bind_param("iissss", $j, $branch_id, $st, $datef, $date1, $atyachar);
+    $stmt3->execute();
+    $stmt3->store_result();
+    //if($stmt3->num_rows === 0) { echo "No Results"; }
+    $stmt3->bind_result($cid2); 
+    $stmt3->fetch();
+$ipc1[$i]=$cid2;	
+    ?>
+	<span><?php echo $cid2;?></span>
+	<?php 
+	$stmt3->close();
+	?>
+	</td>
+	
+    <td>
+	<?php
+ 	$police_dsr->select_db("ftcaaazc_dsr");
+	$vivechna ='विवेचना में लंबित';
+	$stmt4 = $police_dsr->prepare("SELECT COUNT(id) FROM dsr_entries WHERE dsr_vidhan_ipc = ? AND sp_id = ? AND dsr_caste = ? AND (dsr_kaymi_date >= ? and dsr_kaymi_date <= ?) AND c_status = ? AND atyachar_adhiniyam = ?");
+	$stmt4->bind_param("iisssss", $j, $branch_id, $sc, $datef, $date1, $vivechna, $atyachar);
+    $stmt4->execute();
+    $stmt4->store_result();
+    //if($stmt3->num_rows === 0) { echo "No Results"; }
+    $stmt4->bind_result($cid3); 
+    $stmt4->fetch();
+$ipc2[$i]=$cid3;	
+    ?>
+	<span><?php echo $cid3;?></span>
+	<?php 
+	$stmt4->close();
+	?>
+	</td>
+	
+    <td>
+	<?php
+ 	$police_dsr->select_db("ftcaaazc_dsr");
+	$vivechna ='विवेचना में लंबित';
+	$stmt5 = $police_dsr->prepare("SELECT COUNT(id) FROM dsr_entries WHERE dsr_vidhan_ipc = ? AND sp_id = ? AND dsr_caste = ? AND (dsr_kaymi_date >= ? and dsr_kaymi_date <= ?) AND c_status = ? AND atyachar_adhiniyam = ?");
+	$stmt5->bind_param("iisssss", $j, $branch_id, $st, $datef, $date1, $vivechna, $atyachar);
+    $stmt5->execute();
+    $stmt5->store_result();
+    //if($stmt3->num_rows === 0) { echo "No Results"; }
+    $stmt5->bind_result($cid4); 
+    $stmt5->fetch();
+$ipc3[$i]=$cid4;	
+    ?>
+	<span><?php echo $cid4;?></span>
+	<?php 
+	$stmt5->close();
+	?>
+	</td>
+    
+	<td>
+	<?php
+ 	$police_dsr->select_db("ftcaaazc_dsr");
+	$bandi ='बंदी आरोपी';
+	$stmt6 = $police_dsr->prepare("SELECT COUNT(id) FROM dsr_entries WHERE dsr_vidhan_ipc = ? AND sp_id = ? AND dsr_caste = ? AND (dsr_kaymi_date >= ? and dsr_kaymi_date <= ?) AND c_status = ? AND atyachar_adhiniyam = ?");
+	$stmt6->bind_param("iisssss", $j, $branch_id, $sc, $datef, $date1, $bandi, $atyachar);
+    $stmt6->execute();
+    $stmt6->store_result();
+    //if($stmt3->num_rows === 0) { echo "No Results"; }
+    $stmt6->bind_result($cid5); 
+    $stmt6->fetch();	
+	$ipc4[$i]=$cid5;
+    ?>
+	<span><?php echo $cid5;?></span>
+	<?php 
+	$stmt6->close();
+	?>
+	</td>
+    
+	<td>
+	<?php
+ 	$police_dsr->select_db("ftcaaazc_dsr");
+	$bandi ='बंदी आरोपी';
+	$stmt7 = $police_dsr->prepare("SELECT COUNT(id) FROM dsr_entries WHERE dsr_vidhan_ipc = ? AND sp_id = ? AND dsr_caste = ? AND (dsr_kaymi_date >= ? and dsr_kaymi_date <= ?) AND c_status = ? AND atyachar_adhiniyam = ?");
+	$stmt7->bind_param("iisssss", $j, $branch_id, $st, $datef, $date1, $bandi, $atyachar);
+    $stmt7->execute(); 
+    $stmt7->store_result();
+    //if($stmt3->num_rows === 0) { echo "No Results"; }
+    $stmt7->bind_result($cid6); 
+    $stmt7->fetch();
+$ipc5[$i]=$cid6;	
+    ?>
+	<span><?php echo $cid6;?></span>
+	<?php 
+	$stmt7->close();
+	?>
+	</td>
+    
+	<td>
+	<?php
+ 	$police_dsr->select_db("ftcaaazc_dsr");
+	$khatma ='खात्मा';
+	$stmt8 = $police_dsr->prepare("SELECT COUNT(id) FROM dsr_entries WHERE dsr_vidhan_ipc = ? AND sp_id = ? AND dsr_caste = ? AND (dsr_kaymi_date >= ? and dsr_kaymi_date <= ?) AND c_status = ? AND atyachar_adhiniyam = ?");
+	$stmt8->bind_param("iisssss", $j, $branch_id, $sc, $datef, $date1, $khatma, $atyachar);
+    $stmt8->execute();
+    $stmt8->store_result();
+    //if($stmt3->num_rows === 0) { echo "No Results"; }
+    $stmt8->bind_result($cid7); 
+    $stmt8->fetch();
+$ipc6[$i]=$cid7;	
+    ?>
+	<span><?php echo $cid7;?></span>
+	<?php 
+	$stmt8->close();
+	?>
+	</td>
+    
+	<td>
+	<?php
+ 	$police_dsr->select_db("ftcaaazc_dsr");
+	$khatma ='खात्मा';
+	$stmt9 = $police_dsr->prepare("SELECT COUNT(id) FROM dsr_entries WHERE dsr_vidhan_ipc = ? AND sp_id = ? AND dsr_caste = ? AND (dsr_kaymi_date >= ? and dsr_kaymi_date <= ?) AND c_status = ? AND atyachar_adhiniyam = ?");
+	$stmt9->bind_param("iisssss", $j, $branch_id, $st, $datef, $date1, $khatma, $atyachar);
+    $stmt9->execute();
+    $stmt9->store_result();
+    //if($stmt3->num_rows === 0) { echo "No Results"; }
+    $stmt9->bind_result($cid8); 
+    $stmt9->fetch();
+$ipc7[$i]=$cid8;	
+    ?>
+	<span><?php echo $cid8;?></span>
+	<?php 
+	$stmt9->close();
+	?>
+	</td>
+    
+	<td>
+	<?php
+ 	$police_dsr->select_db("ftcaaazc_dsr");
+	$kharji ='खारची';
+	$kharji1 ='ख़ारजी';
+	$stmt10 = $police_dsr->prepare("SELECT COUNT(id) FROM dsr_entries WHERE dsr_vidhan_ipc = ? AND sp_id = ? AND dsr_caste = ? AND (dsr_kaymi_date >= ? and dsr_kaymi_date <= ?) AND (c_status = ? OR c_status = ?) AND atyachar_adhiniyam = ?");
+	$stmt10->bind_param("iissssss", $j, $branch_id, $sc, $datef, $date1, $kharji, $kharji1, $atyachar);
+    $stmt10->execute();
+    $stmt10->store_result();
+    //if($stmt3->num_rows === 0) { echo "No Results"; }
+    $stmt10->bind_result($cid9); 
+    $stmt10->fetch();
+$ipc8[$i]=$cid9;	
+    ?>
+	<span><?php echo $cid9;?></span>
+	<?php 
+	$stmt10->close();
+	?>
+	</td>
+	
+    <td>
+	<?php
+ 	$police_dsr->select_db("ftcaaazc_dsr");
+	$kharji ='खारची';
+	$kharji1 ='ख़ारजी';
+	$stmt11 = $police_dsr->prepare("SELECT COUNT(id) FROM dsr_entries WHERE dsr_vidhan_ipc = ? AND sp_id = ? AND dsr_caste = ? AND (dsr_kaymi_date >= ? and dsr_kaymi_date <= ?) AND (c_status = ? OR c_status = ?) AND atyachar_adhiniyam = ?");
+	$stmt11->bind_param("iissssss", $j, $branch_id, $st, $datef, $date1, $kharji, $kharji1, $atyachar);
+    $stmt11->execute();
+    $stmt11->store_result();
+    //if($stmt3->num_rows === 0) { echo "No Results"; }
+    $stmt11->bind_result($cid10); 
+    $stmt11->fetch();
+$ipc9[$i]=$cid10;	
+    ?>
+	<span><?php echo $cid10;?></span>
+	<?php 
+	$stmt11->close();
+	?>
+	</td>
+	
+    <td>
+	<?php
+ 	$police_dsr->select_db("ftcaaazc_dsr");
+	$nyay = 'न्यायालय में प्रस्तुत';
+	$stmt12 = $police_dsr->prepare("SELECT COUNT(id) FROM dsr_entries WHERE dsr_vidhan_ipc = ? AND sp_id = ? AND dsr_caste = ? AND (dsr_kaymi_date >= ? and dsr_kaymi_date <= ?) AND c_status = ? AND atyachar_adhiniyam = ?");
+	$stmt12->bind_param("iisssss", $j, $branch_id, $sc, $datef, $date1,$nyay, $atyachar);
+    $stmt12->execute();
+    $stmt12->store_result();
+    //if($stmt3->num_rows === 0) { echo "No Results"; }
+    $stmt12->bind_result($cid11); 
+    $stmt12->fetch();
+$ipc10[$i]=$cid11;	
+    ?>
+	<span><?php echo $cid11;?></span>
+	<?php 
+	$stmt12->close();
+	?>
+	</td>
+	
+    <td>
+	<?php
+ 	$police_dsr->select_db("ftcaaazc_dsr");
+	$nyay = 'न्यायालय में प्रस्तुत';
+	$stmt13 = $police_dsr->prepare("SELECT COUNT(id) FROM dsr_entries WHERE dsr_vidhan_ipc = ? AND sp_id = ? AND dsr_caste = ? AND (dsr_kaymi_date >= ? and dsr_kaymi_date <= ?) AND c_status = ? AND atyachar_adhiniyam = ?");
+	$stmt13->bind_param("iisssss", $j, $branch_id, $st, $datef, $date1,$nyay, $atyachar);
+    $stmt13->execute();
+    $stmt13->store_result();
+    //if($stmt3->num_rows === 0) { echo "No Results"; }
+    $stmt13->bind_result($cid12); 
+    $stmt13->fetch();
+$ipc11[$i]=$cid12;	
+    ?>
+	<span><?php echo $cid12;?></span>
+	<?php 
+	$stmt13->close();
+	?>
+	</td>
+	
+    <td>
+	<?php
+ 	$police_dsr->select_db("ftcaaazc_dsr");
+	$dandit = 'सजा';
+	$stmt14 = $police_dsr->prepare("SELECT COUNT(id) FROM dsr_entries WHERE dsr_vidhan_ipc = ? AND sp_id = ? AND dsr_caste = ? AND (dsr_kaymi_date >= ? and dsr_kaymi_date <= ?) AND c_decision = ? AND atyachar_adhiniyam = ?");
+	$stmt14->bind_param("iisssss", $j, $branch_id, $sc, $datef, $date1,$dandit, $atyachar);
+    $stmt14->execute();
+    $stmt14->store_result();
+    //if($stmt3->num_rows === 0) { echo "No Results"; }
+    $stmt14->bind_result($cid13); 
+    $stmt14->fetch();
+$ipc12[$i]=$cid13;	
+    ?>
+	<span><?php echo $cid13;?></span>
+	<?php 
+	$stmt14->close();
+	?>
+	</td>
+	
+    <td>
+	<?php
+ 	$police_dsr->select_db("ftcaaazc_dsr");
+	$dandit = 'सजा';
+	$stmt15 = $police_dsr->prepare("SELECT COUNT(id) FROM dsr_entries WHERE dsr_vidhan_ipc = ? AND sp_id = ? AND dsr_caste = ? AND (dsr_kaymi_date >= ? and dsr_kaymi_date <= ?) AND c_decision = ? AND atyachar_adhiniyam = ?");
+	$stmt15->bind_param("iisssss", $j, $branch_id, $st, $datef, $date1,$dandit, $atyachar);
+    $stmt15->execute();
+    $stmt15->store_result();
+    //if($stmt3->num_rows === 0) { echo "No Results"; }
+    $stmt15->bind_result($cid14); 
+    $stmt15->fetch();
+$ipc13[$i]=$cid14;	
+    ?>
+	<span><?php echo $cid14;?></span>
+	<?php 
+	$stmt15->close();
+	?>
+	</td>
+	
+    <td>
+	<?php
+ 	$police_dsr->select_db("ftcaaazc_dsr");
+	$doshmukt = 'दोषमुक्त';
+	$stmt16 = $police_dsr->prepare("SELECT COUNT(id) FROM dsr_entries WHERE dsr_vidhan_ipc = ? AND sp_id = ? AND dsr_caste = ? AND (dsr_kaymi_date >= ? and dsr_kaymi_date <= ?) AND c_decision = ? AND atyachar_adhiniyam = ?");
+	$stmt16->bind_param("iisssss", $j, $branch_id, $sc, $datef, $date1,$doshmukt, $atyachar);
+    $stmt16->execute();
+    $stmt16->store_result();
+    //if($stmt3->num_rows === 0) { echo "No Results"; }
+    $stmt16->bind_result($cid15); 
+    $stmt16->fetch();
+$ipc14[$i]=$cid15;	
+    ?>
+	<span><?php echo $cid15;?></span>
+	<?php 
+	$stmt16->close();
+	?>
+	</td>
+	
+    <td>
+	<?php
+ 	$police_dsr->select_db("ftcaaazc_dsr");
+	$doshmukt = 'दोषमुक्त';
+	$stmt17 = $police_dsr->prepare("SELECT COUNT(id) FROM dsr_entries WHERE dsr_vidhan_ipc = ? AND sp_id = ? AND dsr_caste = ? AND (dsr_kaymi_date >= ? and dsr_kaymi_date <= ?) AND c_decision = ? AND atyachar_adhiniyam = ?");
+	$stmt17->bind_param("iisssss", $j, $branch_id, $st, $datef, $date1,$doshmukt, $atyachar);
+    $stmt17->execute();
+    $stmt17->store_result();
+    //if($stmt3->num_rows === 0) { echo "No Results"; }
+    $stmt17->bind_result($cid16); 
+    $stmt17->fetch();
+$ipc15[$i]=$cid16;	
+    ?>
+	<span><?php echo $cid16;?></span>
+	<?php 
+	$stmt17->close();
+	?>
+	</td>
+	
+    <td>
+	<?php
+	$nyay_lambit_sc =$cid11-($cid13+$cid15);
+	
+$ipc16[$i]=$nyay_lambit_sc;	
+    ?>
+	<span><?php echo $nyay_lambit_sc;?></span>
+	</td>
+	
+    <td>
+	<?php
+	$nyay_lambit_st =$cid12-($cid14+$cid16);
+	
+$ipc17[$i]=$nyay_lambit_st;	
+    ?>
+	<span><?php echo $nyay_lambit_st;?></span>
+
+	</td>
+	
+    <td>
+	<?php
+	$vivechna_dhin_sc =$cid1-($cid7+$cid9+$cid11);
+	
+$ipc18[$i]=$vivechna_dhin_sc;	
+    ?>
+	<span><?php echo $vivechna_dhin_sc;?></span>
+
+	</td>
+	
+    <td>
+	<?php
+	$vivechna_dhin_st =$cid2-($cid8+$cid10+$cid12);
+
+    $ipc19[$i]=$vivechna_dhin_st;	
+    ?>
+	<span><?php echo $vivechna_dhin_st;?></span>
+
+	</td>
+	</tr>
+	<?php } //stmt1 while end here?><?php } //stmt1 while end here?>
+	
+ <tr>
+    <td colspan="2">योग</td>
+    <td>
+	<?php $s=$ipc[1]+$ipc[2]+$ipc[3]+$ipc[4]+$ipc[5]+$ipc[6]+$ipc[7]+$ipc[8]+$ipc[9]+$ipc[10]+$ipc[11]+$ipc[12]+$ipc[13]+$ipc[14]+$ipc[15]+$ipc[16]+$ipc[17]+$ipc[18];
+	echo $s;?></td>
+	
+    <td>
+	<?php $n=$ipc1[1]+$ipc1[2]+$ipc1[3]+$ipc1[4]+$ipc1[5]+$ipc1[6]+$ipc1[7]+$ipc1[8]+$ipc1[9]+$ipc1[10]+$ipc1[11]+$ipc1[12]+$ipc1[13]+$ipc1[14]+$ipc1[15]+$ipc1[16]+$ipc1[17]+$ipc1[18];
+	echo $n;?></td>
+	
+    <td>
+	<?php $r=$ipc2[1]+$ipc2[2]+$ipc2[3]+$ipc2[4]+$ipc2[5]+$ipc2[6]+$ipc2[7]+$ipc2[8]+$ipc2[9]+$ipc2[10]+$ipc2[11]+$ipc2[12]+$ipc2[13]+$ipc2[14]+$ipc2[15]+$ipc2[16]+$ipc2[17]+$ipc2[18];
+	echo $r;?></td>
+	
+    <td>
+	<?php $t=$ipc3[1]+$ipc3[2]+$ipc3[3]+$ipc3[4]+$ipc3[5]+$ipc3[6]+$ipc3[7]+$ipc3[8]+$ipc3[9]+$ipc3[10]+$ipc3[11]+$ipc3[12]+$ipc3[13]+$ipc3[14]+$ipc3[15]+$ipc3[16]+$ipc3[17]+$ipc3[18];
+	echo $t;?>
+	</td>
+    
+	<td>
+	<?php $u=$ipc4[1]+$ipc4[2]+$ipc4[3]+$ipc4[4]+$ipc4[5]+$ipc4[6]+$ipc4[7]+$ipc4[8]+$ipc4[9]+$ipc4[10]+$ipc4[11]+$ipc4[12]+$ipc4[13]+$ipc4[14]+$ipc4[15]+$ipc4[16]+$ipc4[17]+$ipc4[18];
+	echo $u;?>
+	</td>
+	
+    <td>
+	<?php $v=$ipc5[1]+$ipc5[2]+$ipc5[3]+$ipc5[4]+$ipc5[5]+$ipc5[6]+$ipc5[7]+$ipc5[8]+$ipc5[9]+$ipc5[10]+$ipc5[11]+$ipc5[12]+$ipc5[13]+$ipc5[14]+$ipc5[15]+$ipc5[16]+$ipc5[17]+$ipc5[18];
+	echo $v;?>
+	</td>
+	
+    <td>
+	<?php $w=$ipc6[1]+$ipc6[2]+$ipc6[3]+$ipc6[4]+$ipc6[5]+$ipc6[6]+$ipc6[7]+$ipc6[8]+$ipc6[9]+$ipc6[10]+$ipc6[11]+$ipc6[12]+$ipc6[13]+$ipc6[14]+$ipc6[15]+$ipc6[16]+$ipc6[17]+$ipc6[18];
+	echo $w;?>
+	</td>
+	
+    <td>
+	<?php $x=$ipc7[1]+$ipc7[2]+$ipc7[3]+$ipc7[4]+$ipc7[5]+$ipc7[6]+$ipc7[7]+$ipc7[8]+$ipc7[9]+$ipc7[10]+$ipc7[11]+$ipc7[12]+$ipc7[13]+$ipc7[14]+$ipc7[15]+$ipc7[16]+$ipc7[17]+$ipc7[18];
+	echo $x;?>
+	</td>
+	
+    <td>
+	<?php $y=$ipc8[1]+$ipc8[2]+$ipc8[3]+$ipc8[4]+$ipc8[5]+$ipc8[6]+$ipc8[7]+$ipc8[8]+$ipc8[9]+$ipc8[10]+$ipc8[11]+$ipc8[12]+$ipc8[13]+$ipc8[14]+$ipc8[15]+$ipc8[16]+$ipc8[17]+$ipc8[18];
+	echo $y;?>
+	</td>
+    <td>
+	<?php $z=$ipc9[1]+$ipc9[2]+$ipc9[3]+$ipc9[4]+$ipc9[5]+$ipc9[6]+$ipc9[7]+$ipc9[8]+$ipc9[9]+$ipc9[10]+$ipc9[11]+$ipc9[12]+$ipc9[13]+$ipc9[14]+$ipc9[15]+$ipc9[16]+$ipc9[17]+$ipc9[18];
+	echo $z;?>
+	</td>
+	<td>
+	<?php $z1=$ipc10[1]+$ipc10[2]+$ipc10[3]+$ipc10[4]+$ipc10[5]+$ipc10[6]+$ipc10[7]+$ipc10[8]+$ipc10[9]+$ipc10[10]+$ipc10[11]+$ipc10[12]+$ipc10[13]+$ipc10[14]+$ipc10[15]+$ipc10[16]+$ipc10[17]+$ipc10[18];
+	echo $z1;?>
+	</td>
+	<td>
+	<?php $z2=$ipc11[1]+$ipc11[2]+$ipc11[3]+$ipc11[4]+$ipc11[5]+$ipc11[6]+$ipc11[7]+$ipc11[8]+$ipc11[9]+$ipc11[10]+$ipc11[11]+$ipc11[12]+$ipc11[13]+$ipc11[14]+$ipc11[15]+$ipc11[16]+$ipc11[17]+$ipc11[18];
+	echo $z2;?>
+	</td>
+	<td>
+	<?php $z3=$ipc12[1]+$ipc12[2]+$ipc12[3]+$ipc12[4]+$ipc12[5]+$ipc12[6]+$ipc12[7]+$ipc12[8]+$ipc12[9]+$ipc12[10]+$ipc12[11]+$ipc12[12]+$ipc12[13]+$ipc12[14]+$ipc12[15]+$ipc12[16]+$ipc12[17]+$ipc12[18];
+	echo $z3;?>
+	</td>
+	<td>
+	<?php $z4=$ipc13[1]+$ipc13[2]+$ipc13[3]+$ipc13[4]+$ipc13[5]+$ipc13[6]+$ipc13[7]+$ipc13[8]+$ipc13[9]+$ipc13[10]+$ipc13[11]+$ipc13[12]+$ipc13[13]+$ipc13[14]+$ipc13[15]+$ipc13[16]+$ipc13[17]+$ipc13[18];
+	echo $z4;?>
+	</td>
+	<td>
+	<?php $z5=$ipc14[1]+$ipc14[2]+$ipc14[3]+$ipc14[4]+$ipc14[5]+$ipc14[6]+$ipc14[7]+$ipc14[8]+$ipc14[9]+$ipc14[10]+$ipc14[11]+$ipc14[12]+$ipc14[13]+$ipc14[14]+$ipc14[15]+$ipc14[16]+$ipc14[17]+$ipc14[18];
+	echo $z5;?>
+	</td>
+	<td>
+	<?php $z6=$ipc15[1]+$ipc15[2]+$ipc15[3]+$ipc15[4]+$ipc15[5]+$ipc15[6]+$ipc15[7]+$ipc15[8]+$ipc15[9]+$ipc15[10]+$ipc15[11]+$ipc15[12]+$ipc15[13]+$ipc15[14]+$ipc15[15]+$ipc15[16]+$ipc15[17]+$ipc15[18];
+	echo $z6;?>
+	</td>
+	<td>
+	<?php $z7=$ipc16[1]+$ipc16[2]+$ipc16[3]+$ipc16[4]+$ipc16[5]+$ipc16[6]+$ipc16[7]+$ipc16[8]+$ipc16[9]+$ipc16[10]+$ipc16[11]+$ipc16[12]+$ipc16[13]+$ipc16[14]+$ipc16[15]+$ipc16[16]+$ipc16[17]+$ipc16[18];
+	echo $z7;?>
+	</td>
+	<td>
+	<?php $z8=$ipc17[1]+$ipc17[2]+$ipc17[3]+$ipc17[4]+$ipc17[5]+$ipc17[6]+$ipc17[7]+$ipc17[8]+$ipc17[9]+$ipc17[10]+$ipc17[11]+$ipc17[12]+$ipc17[13]+$ipc17[14]+$ipc17[15]+$ipc17[16]+$ipc17[17]+$ipc17[18];
+	echo $z8;?>
+	</td>
+	<td>
+	<?php $z9=$ipc18[1]+$ipc18[2]+$ipc18[3]+$ipc18[4]+$ipc18[5]+$ipc18[6]+$ipc18[7]+$ipc18[8]+$ipc18[9]+$ipc18[10]+$ipc18[11]+$ipc18[12]+$ipc18[13]+$ipc18[14]+$ipc18[15]+$ipc18[16]+$ipc18[17]+$ipc18[18];
+	echo $z9;?>
+	</td>
+	<td>
+	<?php $z10=$ipc19[1]+$ipc19[2]+$ipc19[3]+$ipc19[4]+$ipc19[5]+$ipc19[6]+$ipc19[7]+$ipc19[8]+$ipc19[9]+$ipc19[10]+$ipc19[11]+$ipc19[12]+$ipc19[13]+$ipc19[14]+$ipc19[15]+$ipc19[16]+$ipc19[17]+$ipc19[18];
+	echo $z10;?>
+	</td>
+  </tr>
+</table>
+
+    <br /><br />
+  
+    <br /><br />
+    <p style="float:right" align="center"></p>
+	
+  </div>
+  <?php } //search end here?>
+  </div>
+ </div>
+<style>
+.break { page-break-before: always; }
+</style>
+<p class="break"></p>
+<!-- GLOBAL SCRIPTS --> 
+<script src="../assets/plugins/jquery-2.0.3.min.js"></script> 
+<script src="../assets/plugins/bootstrap/js/bootstrap.min.js"></script> 
+<script src="../assets/plugins/modernizr-2.6.2-respond-1.1.0.min.js"></script> 
+<!-- END GLOBAL SCRIPTS --> 
+<!-- PAGE LEVEL SCRIPTS --> 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
+<script src="../assets/js/progressbar.js"></script> 
+<script src="../assets/plugins/dataTables/jquery.dataTables.js"></script> 
+<script src="../assets/plugins/dataTables/dataTables.bootstrap.js"></script> 
+ 
+<script>
+         $(document).ready(function () {
+             $('#dataTables-example').dataTable();
+         });
+    </script> 
+ 
+<!-- END PAGE LEVEL SCRIPTS --> 
+<script type="text/javascript" src="../assets/js/multirow.js"></script> 
+<script src="../assets/plugins/validationengine/js/jquery.validationEngine.js"></script> 
+<script src="../assets/plugins/validationengine/js/languages/jquery.validationEngine-en.js"></script> 
+<script src="../assets/plugins/jquery-validation-1.11.1/dist/jquery.validate.min.js"></script> 
+<script src="../assets/js/validationInit.js"></script> 
+<script>
+        $(function () { formValidation(); });
+        </script> 
+<script src="../assets/js/formsInit.js"></script> 
+<script>
+            $(function () { formInit(); });
+        </script> 
+
+<script src="../assets/js/jquery-ui.min.js"></script> 
+<script src="../assets/plugins/uniform/jquery.uniform.min.js"></script> 
+<script src="../assets/plugins/inputlimiter/jquery.inputlimiter.1.3.1.min.js"></script> 
+<script src="../assets/plugins/chosen/chosen.jquery.min.js"></script> 
+<script src="../assets/plugins/colorpicker/js/bootstrap-colorpicker.js"></script> 
+<script src="../assets/plugins/tagsinput/jquery.tagsinput.min.js"></script> 
+<script src="../assets/plugins/validVal/js/jquery.validVal.min.js"></script> 
+<script src="../assets/plugins/datepicker/js/bootstrap-datepicker.js"></script> 
+<script src="../assets/plugins/autosize/jquery.autosize.min.js"></script>
+</body>
+</html>

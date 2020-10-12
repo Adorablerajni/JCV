@@ -1,0 +1,335 @@
+a:focus {
+	outline: 1px solid;
+}
+.nav-links .pagination-btn:focus,
+.nav-links .pagination-btn.current {
+	background: #ee394a;
+	border-color: #ee394a;
+	color: #fff;
+}
+.post-navigation a:focus {
+	color: #ee394a;
+}
+.widget ul li a:focus {
+	color: #ee394a;
+}
+.entry-title a:focus {
+	color: #ee394a;
+}
+.entry-meta > span a:focus {
+	color: #ee394a;
+}
+.entry-meta > span.comments-link a:focus {
+	color: #fff;
+}
+.post-edit-link:focus {
+	background: none;
+	color: #ee394a;
+}
+.nav-links a:focus {
+	color: #ee394a;
+	border-bottom-color: #ee394a;
+}
+.posts-navigation .nav-links a:focus {
+	border-bottom-color: #ee394a;
+}
+.woocommerce nav.woocommerce-pagination ul li a:focus, 
+.woocommerce nav.woocommerce-pagination ul li a:focus, 
+.woocommerce nav.woocommerce-pagination ul li span.current {
+	background: none;
+	border-color: #ee394a;
+	color: #ee394a;
+}
+#ghumti-scrollup:focus {
+	background: #ee394a;
+	color: #fff;
+}
+.top-navigation ul li:focus > a::after, 
+.top-navigation ul li.current-menu-item > a::after, 
+.top-navigation ul li.current_page_item > a::after {
+	opacity: 1;
+	filter: alpha(opacity=100);
+	visibility: visible;    
+}
+.top-navigation ul li:focus > ul {
+	opacity: 1;
+	filter: alpha(opacity=100);
+	visibility: visible;
+}
+.ticker-content-wrapper ul.owl-carousel li a:focus {
+	color: #ee394a;
+	text-decoration: underline;
+}
+.ticker-content-wrapper .owl-carousel .owl-nav [class*="owl-"]:focus {
+	background: #ee394a;
+	color: #fff;
+}
+.ghumti-social-icons-wrapper .social-link a:focus {
+	background: #ee394a;
+	color: #fff;
+}
+.ghumti-logo-right-section-wrapper .cart-box:focus, 
+.ghumti-logo-right-section-wrapper .wishlist-box:focus {
+	background: #ee394a;
+	color: #fff;
+}
+.my-account button:focus + .welcome-user {
+	opacity: 1;
+	filter: alpha(opacity=100);
+	visibility: visible;
+}
+.my-account .welcome-user a:focus {
+	text-decoration: none;
+	color: #ddd;
+}
+.my-account .welcome-user form p .button:focus {
+	border-color: #1c1b1b;
+	background: #1c1b1b;
+}
+
+.my-account .welcome-user form p label.woocommerce-form__label-for-checkbox:focus span {
+	text-decoration: underline;
+}
+.my-account .welcome-user a.register:focus {
+	background: #1c1b1b;
+	border-color: #1c1b1b;
+}
+.ghumti-logo-right-section-wrapper .cart-box:focus > a.cart-contents, 
+.wishlist-box:focus .wishlist_view {
+	color: #fff;
+}
+.cart-box:focus .cart-count, 
+.wishlist-box:focus .your-counter-selector {
+	background: #e5e5e5;
+	color: #ee394a;
+}
+.cart-box:focus .woocommerce.widget_shopping_cart {
+	opacity: 1;
+	filter: alpha(opacity=100);
+	visibility: visible;
+}
+.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar, 
+.mCSB_scrollTools .mCSB_dragger:focus .mCSB_dragger_bar, 
+.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, 
+.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
+	background: #ee394a;
+}
+
+.mCSB_scrollTools .mCSB_dragger:focus .mCSB_dragger_bar, 
+.mCSB_scrollTools .mCSB_dragger:active .mCSB_dragger_bar, 
+.mCSB_scrollTools .mCSB_dragger.mCSB_dragger_onDrag .mCSB_dragger_bar {
+	width: 6px;
+	cursor: n-resize;
+}
+.cart-box .widget_shopping_cart ul.product_list_widget li a:not(.remove):focus {
+	color: #ee394a;
+}
+.main-navigation ul.nav-menu > li.focus > a, 
+.main-navigation ul.nav-menu > li:focus > a, 
+.main-navigation ul.nav-menu > li.current-menu-item > a, 
+.main-navigation ul.nav-menu > li.current_page_item > a {
+	color: #ee394a;
+}
+.main-navigation ul li.focus > ul,
+.main-navigation ul li:focus > ul {
+	opacity: 1;
+	filter: alpha(opacity=100);
+	visibility: visible;
+}
+.main-navigation ul.nav-menu ul > li.focus > a, 
+.main-navigation ul.nav-menu ul > li:focus > a, 
+.main-navigation ul.nav-menu ul > li.current-menu-item > a, 
+.main-navigation ul.nav-menu ul > li.current_page_item > a {
+	background: rgba(255,255,255,0.1);
+}
+.ghumti-header-search-wrapper .search-main:focus {
+	color: #ee394a;
+	border: 1px solid;
+}
+.search-form .search-submit:focus, 
+.search-form .search-submit:focus, 
+.search-form .search-submit:active, 
+.widget_product_search .woocommerce-product-search button[type="submit"]:focus, 
+.widget_product_search .woocommerce-product-search button[type="submit"]:focus, 
+.widget_product_search .woocommerce-product-search button[type="submit"]:active {
+	background: #fff url(assets/images/search-icon.png) no-repeat center;
+}
+.owl-carousel .owl-nav button[class*="owl-"]:focus {
+	background: rgba(255,255,255,0.7);
+}
+a.ghumti-read-more:focus, 
+.ghumti-main-slider li a.ghumti-read-more:focus {
+	background: #ee394a;
+	border-color: #ee394a;
+	color: #fff;
+}
+.post-cats-list span a:focus {
+	color: #ddd;
+	text-decoration: underline;
+}
+.slider-posts .ghumti-slide-content-wrap .post-title a:focus {
+	color: #ddd;
+	text-decoration: underline;
+}
+.ghumti-single-post-wrap .ghumti-post-content .ghumti-post-title a:focus {
+	text-decoration: underline;
+	color: #ddd;
+}
+.featured-posts-wrapper .ghumti-post-content a.ghumti-read-more:focus {
+	background: none;
+	text-decoration: none;
+	color: #ee394a;
+}
+.ghumti-post-meta a:focus {
+	text-decoration: underline;
+}
+.ghumti-post-meta .comments-link a:focus {
+	text-decoration: none;
+}
+.ghumti-post-title a:focus {
+	color: #ee394a;
+}
+.ghumti-single-post a.ghumti-read-more:focus, 
+.ghumti-button:focus {
+	background: none;
+	color: #1c1b1b;
+	text-decoration: underline;
+}
+.ghumti_cat_product .feature-cat-image .product-cat-desc a:focus {
+	text-decoration: underline;
+}
+.ghumti_cat_product .owl-nav button[class*="owl-"]:focus {
+	background: #1c1b1b;
+}
+.product a:focus {
+	color: #ee394a;
+}
+.woocommerce #respond input#submit:focus, 
+.woocommerce a.button:focus, 
+.woocommerce button.button:focus, 
+.woocommerce input.button:focus, 
+.single-product .entry-summary .yith-wcwl-add-to-wishlist .add_to_wishlist:focus, 
+.product .button:focus, 
+.item-content-wrap .button:focus {
+	color: #fff;
+	background: #ee394a;
+	border-color: #ee394a;
+}
+.product a.button.yith-wcqv-button:focus {
+	color: #fff;
+}
+.ghumti-product-slider.owl-carousel .owl-nav button[class*="owl-"]:focus {
+	background: #ee394a;
+	color: #fff;
+	border-color: #ee394a;
+}
+.tagcloud a:focus {
+	border-color: #ee394a;
+	color: #ee394a;
+}
+.ghumti-sale-slide .item-content-wrap h3 a:focus {
+	color: #f5384c;
+}
+.ghumti_special_product .owl-carousel .owl-nav button[class*="owl-"]:focus {
+	background: rgba(0,0,0,0.25);
+}
+.ghumti_product_carousel .title-price-wrap a + a:focus {
+	background: transparent;
+	border-color: rgba(255,255,255,0.5);
+	color: #fff;
+}
+
+.ghumti_product_carousel .title-price-wrap a:focus,
+.ghumti_product_carousel .title-price-wrap a + a {
+	background: #ee394a;
+	border-color: #ee394a;
+	color: #fff;
+}
+.ghumti_product_carousel .title-price-wrap a.button.yith-wcqv-button:focus {
+	background: #ee394a;
+}
+.main-footer .footer-navigation ul li a:focus, 
+.main-footer .footer-navigation ul li.current-menu-item > a, 
+.main-footer .footer-navigation ul li.current_page_item > a {
+	color: #ee394a;
+}
+.site-info a:focus {
+	color: #ee394a;
+}
+.single .site-main .post-cats-list span a:focus {
+	background: #ee394a;
+	color: #fff;
+}
+.single .site-main article .entry-content a:focus {
+	text-decoration: underline;
+}
+.ghumti-related-posts-wrap .ghumti-post-meta > span a:focus {
+	color: #ee394a;
+}
+.comments-area ol li .comment-author a:focus {
+	color: #ee394a;
+}
+.comments-area ol li .comment-metadata a:focus {
+	color: #ee394a;
+	text-decoration: underline;
+}
+.comments-area ol li article .reply a:focus {
+	text-decoration: underline;
+}
+.comments-area form label[for="wp-comment-cookies-consent"]:focus {
+	text-decoration: underline;
+}
+.woocommerce #respond input#submit.alt:focus, 
+.woocommerce a.button.alt:focus, 
+.woocommerce button.button.alt:focus, 
+.woocommerce input.button.alt:focus {
+	background-color: #ee394a;
+}
+.single-product .entry-summary .product_meta > span a:focus {
+	text-decoration: underline;
+}
+.woocommerce #respond input#submit.disabled:focus, 
+.woocommerce #respond input#submit:disabled:focus, 
+.woocommerce #respond input#submit:disabled[disabled]:focus, 
+.woocommerce a.button.disabled:focus, 
+.woocommerce a.button:disabled:focus, 
+.woocommerce a.button:disabled[disabled]:focus, 
+.woocommerce button.button.disabled:focus, 
+.woocommerce button.button:disabled:focus, 
+.woocommerce button.button:disabled[disabled]:focus, 
+.woocommerce input.button.disabled:focus, 
+.woocommerce input.button:disabled:focus, 
+.woocommerce input.button:disabled[disabled]:focus {
+	background: #ee394a;
+	color: #fff;
+}
+.woocommerce table.shop_table td a:focus {
+	color: #ee394a;
+	text-decoration: underline;
+}
+.woocommerce-info a:focus {
+	text-decoration: underline;
+}
+.woocommerce-account .woocommerce-MyAccount-navigation ul li a:focus {
+	color: #1c1b1b;
+}
+@media screen and (max-width: 992px) {
+
+	.top-navigation .toggle-menu:focus, 
+	.top-navigation.menu-active .toggle-menu {
+		opacity: 1;
+		filter: alpha(opacity=100);
+	}
+	.main-navigation .toggle-btn:focus .toggle-bar {
+		background: #ee394a;
+	}
+	.main-navigation .nav-menu .close:focus::before, 
+	.main-navigation .nav-menu .close:focus::after {
+		background: #ee394a;
+	}
+	.main-navigation ul ul li:focus > a, 
+	.main-navigation ul ul li.current-menu-item > a, 
+	.main-navigation ul ul li.current_page_item > a {
+		color: #ee394a;
+	}
+}

@@ -1,0 +1,706 @@
+/*=============== RESPONSIVE STYLESHEET ============*/
+
+@media screen and (min-width: 1401px) {
+    body.boxed_layout .site {
+        max-width: 1350px;
+    }
+    .at-container {
+        max-width: 1280px;
+    }
+}
+
+@media screen and (max-width: 1400px) {
+    .at-container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    .center-align-caption .slider-posts .ghumti-slide-content-wrap, 
+    .center-align-caption .ghumti-single-post-wrap .ghumti-post-content {
+        padding: 20px;
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 1180px) {
+    body.boxed_layout .site {
+        max-width: 90%;
+    }
+    .at-container {
+        max-width: 1000px;
+    }
+    .center-align-caption .slider-posts .ghumti-slide-content-wrap .post-title {
+        font-size: 1.2em;
+    }
+    .center-align-caption .ghumti-single-slide-wrap .ghumti-excerpt {
+        font-size: 1em;
+    }
+
+    .boxed_layout .ghumti-ticker-wrapper .ticker-content-wrapper {
+        max-width: 74%;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .at-container {
+        max-width: 768px;
+    }
+
+    #ghumti-scrollup {
+        bottom: 70px;
+    }
+
+    .ghumti-logo-left-section-wrapper, 
+    .site-branding, 
+    .ghumti-logo-right-section-wrapper {
+        width: 32.66%;
+    }
+
+    .ghumti-ticker-wrapper .ticker-content-wrapper {
+        float: left;
+        width: 64%;
+    }
+
+    .boxed_layout .ghumti-ticker-wrapper .ticker-content-wrapper {
+        max-width: 60%;
+    }
+
+    .ghumti-social-icons-wrapper .social-link {
+        padding: 2px;
+    }
+
+    /*=========== SIDEBARS ===============*/
+    .right-sidebar #primary, 
+    .left-sidebar #primary {
+        float: none;
+        width: 100%;
+        padding-right: 0;
+        padding-left: 0;
+    }
+    #secondary {
+        float: none;
+        width: 100%;
+        margin-top: 80px;
+    }
+
+    /*=========== TOP HEADER ==============*/
+    .ghumti-top-header-wrap {
+        position: relative;
+    }
+
+    .top-navigation .toggle-menu {
+        font-size: 0.875em;
+        padding: 0;
+        width: 100%;
+        text-align: left;
+        position: relative;
+        background: none;
+        opacity: 0.7;
+        filter: alpha(opacity=70);
+    }
+
+    .top-navigation .toggle-menu:hover, 
+    .top-navigation.menu-active .toggle-menu {
+        opacity: 1;
+        filter: alpha(opacity=100);
+    }
+
+    .top-navigation .toggle-menu::after {
+        content: "\f0c9";
+        font-family: fontawesome;
+        position: absolute;
+        top: 10px;
+        right: 0;
+        font-size: 1.5em;
+    }
+
+    .top-navigation .menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 999;
+        background: #1c1b1b;
+        max-height: 480px;
+        overflow: auto;
+        display: none;
+    }
+
+    .top-navigation ul li {
+        display: block;
+    }
+
+    .top-navigation ul li a {
+        display: block;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .top-navigation ul ul {
+        position: static;
+        width: 100%;
+        transition: none;
+        opacity: 1;
+        visibility: visible;
+        background: rgba(255,255,255,0.03);
+        display: none;
+    }
+
+    .top-navigation .menu-item-has-children .toggle {
+        color: #fff;
+        right: 10px;
+    }
+
+    /*=========== HEADER MENU WRAP ==============*/
+    .main-navigation .toggle-btn {
+        display: block;
+        padding: 0;
+        width: 35px;
+        height: 35px;
+        position: relative;
+        background: none;
+    }
+    .main-navigation .toggle-btn .toggle-bar {
+        width: 25px;
+        height: 3px;
+        background: #1c1b1b;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        margin: auto;
+        -webkit-transition: all ease 0.35s;
+        -moz-transition: all ease 0.35s;
+        transition: all ease 0.35s;
+    }
+    .main-navigation .toggle-btn .toggle-bar:first-child {
+        top: -15px;
+    }
+    .main-navigation .toggle-btn .toggle-bar:last-child {
+        bottom: -15px;
+    }
+    .main-navigation .toggle-btn:hover .toggle-bar {
+        background: #ee394a;
+    }
+    .main-navigation ul.nav-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: #f5f5f5;
+        height: 100%;
+        width: 50%;
+        padding: 80px 20px 20px 20px;
+        z-index: 9999;
+        overflow: auto;
+        box-shadow: 2px 0px 10px rgba(0,0,0,0.3);
+        visibility: hidden;
+        -webkit-transform: translateX(-100%);
+        -moz-transform: translateX(-100%);
+        transform: translateX(-100%);
+        -webkit-transition: all ease 0.35s;
+        -moz-transition: all ease 0.35s;
+        transition: all ease 0.35s;
+        display: none;
+    }
+    .main-navigation.menu-toggled ul.nav-menu {
+        visibility: visible;
+        -webkit-transform: translateX(0);
+        -moz-transform: translateX(0);
+        transform: translateX(0);
+        display: block;
+    }
+    .main-navigation .nav-menu .close {
+        display: block;
+        width: 30px;
+        height: 30px;
+        background: #ddd;
+        position: absolute;
+        top: 40px;
+        right: 20px;
+        border-radius: 100%;
+        cursor: pointer;
+    }
+    .main-navigation .nav-menu .close::before, 
+    .main-navigation .nav-menu .close::after {
+        content: "";
+        background: #1c1b1b;
+        width: 15px;
+        height: 2px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        transform: rotate(45deg);
+        -webkit-transition: all ease 0.35s;
+        -moz-transition: all ease 0.35s;
+        transition: all ease 0.35s;
+    }
+    .main-navigation .nav-menu .close::after {
+        -webkit-transform: rotate(-45deg);
+        -moz-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+    }
+    .main-navigation .nav-menu .close:hover::before, 
+    .main-navigation .nav-menu .close:hover::after {
+        background: #ee394a;
+    }
+    .main-navigation ul li {
+        float: none;
+    }
+    .main-navigation ul li a {
+        padding-left: 0;
+        border-bottom: 1px solid #e5e5e5;
+        width: 100%;
+    }
+    .main-navigation ul li ul {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        width: 100%;
+        background: none;
+        border-bottom: 2px solid #e5e5e5;
+        display: block;
+        -webkit-transition: none;
+        -moz-transition: none;
+        transition: none;
+    }
+
+    .main-navigation ul ul li a {
+        color: #1c1b1b;
+        border-bottom-color: #e5e5e5;
+    }
+
+    .main-navigation ul ul li:hover > a, 
+    .main-navigation ul ul li.current-menu-item > a, 
+    .main-navigation ul ul li.current_page_item > a {
+        color: #ee394a;
+    }
+
+    .menu-item-has-children .toggle {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 20px;
+        height: 60px;
+        line-height: 20px;
+        text-align: center;
+        font-size: 12px;
+        cursor: default;
+        display: flex;
+        justify-content: center;
+        flex: 1;
+        flex-direction: column;
+        z-index: 999;
+        -webkit-transition: all ease 0.35s;
+        -moz-transition: all ease 0.35s;
+        transition: all ease 0.35s;
+    }
+
+    .menu-item-has-children .toggle.active {
+        -webkit-transform: rotate(180deg);
+        -moz-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+
+    /*============ GHUMTI FEATURED SLIDER ===============*/
+    .ghumti_featured_slider .ghumti-slider-featured .slider-posts {
+        float: none;
+        width: 100%;
+        padding-right: 0;
+    }
+    .slider-posts .ghumti-slide-content-wrap {
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+    .slider-posts .ghumti-slide-content-wrap .post-title {
+        max-width: 100%;
+    }
+    .ghumti-single-slide-wrap .ghumti-excerpt {
+        max-width: 100%;
+        font-size: 1em;
+    }
+    .owl-carousel .owl-nav button[class*="owl-"] {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        font-size: 0.8125em;
+    }
+    .ghumti_featured_slider .ghumti-slider-featured .featured-posts {
+        float: none;
+        width: 100%;
+    }
+    .featured-posts .ghumti-single-post-wrap {
+        display: inline-block;
+        width: 48.5%;
+        vertical-align: top;
+        margin-right: 2%;
+        margin-top: 10px;
+    }
+    .featured-posts .ghumti-single-post-wrap:last-child {
+        margin-right: 0;
+    }
+    .ghumti-single-post-wrap .ghumti-single-post {
+        margin-bottom: 0;
+    }
+
+    /*================ GHUMTI BLOCK POST =============*/
+    .ghumti_block_posts .ghumti-single-post {
+        width: 31%;
+    }
+
+    /*================ GHUMTI CTA FORM ================*/
+    .ghumti_cta_form .cta-content-wrap {
+        float: none;
+        width: 100%;
+        margin-bottom: 50px;
+    }
+
+    .ghumti_cta_form .cta-form {
+        float: none;
+        width: 100%;
+        padding-left: 0;
+    }
+
+    /*=============== GHUMTI CAT PRODUCT ==============*/
+    .ghumti_cat_product .feature-cat-image {
+        float: none;
+        width: 100%;
+    }
+    .ghumti_cat_product .cat_right_align .feature-cat-image {
+        float: none;
+    }
+
+    .ghumti_cat_product .cat_right_align .feature-cat-image img {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+    }
+
+    .ghumti_cat_product .ghumti-catproduct {
+        float: none;
+        width: 100%;
+        padding-left: 0px;
+        padding-top: 80px;
+        position: relative;
+    }
+    .ghumti_cat_product .cat_right_align .ghumti-catproduct {
+        padding-right: 0;
+    }
+    .ghumti_cat_product .owl-nav {
+        bottom: auto;
+        top: 0;
+        width: 100%;
+        text-align: center;
+    }
+    .ghumti_cat_product .owl-nav button[class*="owl-"] {
+        width: 49%;
+        height: 45px;
+        line-height: 45px;
+    }
+
+    /*=============== GHUMTI SPECIAL PRODUCT =============*/
+    .ghumti_special_product .ghumti-sale-slide li a.item-img {
+        float: none;
+        width: 100%;
+        margin-bottom: 30px;
+        display: block;
+    }
+
+    .ghumti_special_product .ghumti-sale-slide li .item-content-wrap {
+        float: none;
+        width: 100%;
+        padding-left: 0;
+    }
+
+    /*================ GHUMTI PRODUCT CAROUSEL ===============*/
+    .ghumti_product_carousel .owl-item .title-price-wrap {
+        padding: 40px;
+    }
+    .ghumti_product_carousel .ghumti-product-carousel .owl-item {
+        height: auto;
+    }
+
+    /*================ SITE FOOTER SECTION ================*/
+    .footer_column_three .ghumti-top-footer-widget .widget, 
+    .footer_column_four .ghumti-top-footer-widget .widget {
+        width: 48%;
+    }
+
+    .footer_column_three .ghumti-top-footer-widget .widget:nth-child(3n), 
+    .footer_column_four .ghumti-top-footer-widget .widget:nth-child(4n) {
+        margin-right: 3%;
+    }
+
+    .footer_column_three .ghumti-top-footer-widget .widget:nth-child(2n), 
+    .footer_column_four .ghumti-top-footer-widget .widget:nth-child(2n) {
+        margin-right: 0;
+    }
+    .main-footer .footer-navigation ul li a {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    /*================ ERROR 404 PAGE ================*/
+    .error404 .error-num span {
+        padding-left: 3.3em;
+        letter-spacing: 90px;
+    }
+
+}
+
+@media screen and (max-width: 640px) {
+    body.boxed_layout .site {
+        max-width: 100%;
+    }
+
+    .at-container {
+        max-width: 480px;
+    }
+
+    .ghumti-home-middle-section .ghumti-block-title, 
+    .page-title {
+        font-size: 1.375em;
+    }
+
+    blockquote {
+        margin: 20px;
+        padding: 30px;
+    }
+
+    /*========== TOP HEADER ===============*/
+    .top-navigation .menu {
+        max-height: 225px;
+    }
+
+    /*========== HEADER TICKER =============*/
+    .ghumti-ticker-wrapper .ticker-caption {
+        text-align: center;
+        display: block;
+        float: none;
+    }
+    .ghumti-ticker-wrapper .ticker-caption:after {
+        display: none;
+    }
+    .ghumti-ticker-wrapper .ticker-content-wrapper {
+        max-width: 100%;
+        text-align: center;
+        display: block;
+        float: none;
+        width: 100%;
+    }
+    .ticker-content-wrapper ul.owl-carousel li a {
+        padding-left: 0;
+        padding-right: 30px;
+    }
+
+    /*=============== SITE HEADER =============*/
+    .ghumti-logo-left-section-wrapper {
+        order: 2;
+        width: auto;
+    }
+    .ghumti-logo-section-wrapper .at-container {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .ghumti-social-icons-wrapper .social-link {
+        padding: 10px 2px;
+    }
+    .site-branding {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .ghumti-logo-right-section-wrapper {
+        text-align: left;
+        width: auto;
+        order: 3;
+    }
+    .ghumti-logo-right-section-wrapper .my-account, 
+    .ghumti-logo-right-section-wrapper .cart-box {
+        margin-left: 0;
+        position: static;
+    }
+    .ghumti-logo-right-section-wrapper .wishlist-box {
+        margin-left: 0;
+    }
+    .my-account .welcome-user {
+        left: 0;
+        margin: 0 auto;
+        width: 280px;
+    }
+    .cart-box .woocommerce.widget_shopping_cart {
+        left: 0;
+        margin: 0 auto;
+        width: 300px;
+    }
+    .cart-box .widget_shopping_cart_content {
+        min-width: 100%;
+    }
+
+    /*============== HEADER MENU WRAP ==============*/
+    .main-navigation ul.nav-menu {
+        width: 80%;
+    }
+    .ghumti-header-search-wrapper .search-form-main {
+        right: -10px;
+    }
+    .ghumti-header-search-wrapper .search-form-main .search-form {
+        width: 300px;
+    }
+
+    /*============ GHUMTI FEATURED SLIDER =============*/
+    .ghumti_featured_slider .ghumti-slide-thumb {
+        height: 350px;
+    }
+    .ghumti_featured_slider .ghumti-slide-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .ghumti-single-slide-wrap .ghumti-excerpt p {
+        display: none;
+    }
+    .ghumti_featured_slider a.ghumti-read-more {
+        margin-top: 10px;
+    }
+    .featured-posts .ghumti-single-post-wrap {
+        width: 100%;
+        margin-right: 0;
+    }
+    .ghumti-single-post-wrap .ghumti-single-post {
+        margin-bottom: 10px;
+    }
+    .ghumti_featured_slider .ghumti-slider-featured .slider-posts {
+        margin-bottom: 5px;
+    }
+
+    /*=========== GHUMTI BLOCK POST ==============*/
+    .ghumti_block_posts .ghumti-single-post {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .ghumti_block_posts .ghumti-single-post:last-child {
+        margin-bottom: 0;
+    }
+
+    .archive-grid .ghumti-archive-grid-post-wrapper {
+        flex-direction: column;
+    }
+
+    .archive-grid .ghumti-archive-grid-post-wrapper article {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    /*============ GHUMTI CTA FORM ==============*/
+    .cta-form form p {
+        width: 100%;
+        float: none;
+        padding: 0;
+    }
+
+    /*================ GHUMTI SPECIAL PRODUCT =============*/
+    .ghumti_special_product .item-content-wrap .fl-pcountdown-cnt ul li {
+        margin-bottom: 10px;
+        flex: 80px;
+    }
+
+    /*=============== GHUMTI PRODUCT CAROUSEL ==============*/
+    .ghumti_product_carousel .owl-item .title-price-wrap {
+        position: static;
+        background: rgba(0,0,0,0.75);
+    }
+    .ghumti_product_carousel .title-price-wrap .woocommerce-loop-product__title {
+        font-size: 1.375em;
+    }
+    .ghumti_product_carousel .owl-item .title-price-wrap .price {
+        font-size: 1em;
+    }
+
+    .ghumti_product_carousel .title-price-wrap a {
+        margin-top: 15px;
+        display: block;
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    /*=============== SITE FOOTER SECTION ==============*/
+    .footer_column_two .ghumti-top-footer-widget .widget, 
+    .footer_column_three .ghumti-top-footer-widget .widget, 
+    .footer_column_four .ghumti-top-footer-widget .widget {
+        width: 100%;
+        margin-right: 0;
+    }
+
+
+    /*============= POST NAVIGATION ==============*/
+    .post-navigation .nav-previous {
+        float: none;
+        width: 100%;
+        margin-bottom: 20px;
+        padding-right: 0;
+    }
+
+    .post-navigation .nav-next {
+        float: none;
+        width: 100%;
+        padding-left: 0;
+    }
+
+
+    /*============== RELATED POST ==============*/
+    .ghumti-related-posts-wrap .ghumti-single-post {
+        float: none;
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 40px;
+    }
+    .ghumti-related-posts-wrap .ghumti-single-post:last-child {
+        margin-bottom: 0;
+    }
+
+
+    /*============== COMMENT SECTION =============*/
+    .comments-area {
+        padding: 20px;
+    }
+    .comments-area ol li article {
+        padding-left: 0;
+    } 
+    .comments-area ol li.bypostauthor > article {
+        padding-left: 20px;
+    }
+    .comments-area ol li .comment-author img {
+        position: static;
+    }
+    .comments-area ol.children {
+        margin-left: 25px;
+    }
+    .comments-area form p.comment-form-author, 
+    .comments-area form p.comment-form-email, 
+    s.comments-area form p.comment-form-url {
+        float: none;
+        width: 100%;
+        margin-right: 0;
+    }
+
+
+    /*=============== ERROR 404 PAGE ==============*/
+    .error404 .error-num {
+        font-size: 7em;
+    }
+
+    .error404 .error-num span {
+        padding-left: 3.3em;
+        letter-spacing: 45px;
+    }
+
+}

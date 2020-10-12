@@ -1,0 +1,167 @@
+.ghumti-ticker-wrapper .ticker-caption {
+    padding: 0 20px 0 10px;
+    padding-right: 20px;
+    padding-left: 10px;
+    text-align: left;
+    margin-right: 0;
+    margin-left: 0;
+    float: right;
+}
+.ghumti-ticker-wrapper .ticker-caption::after {
+    right: unset;
+    left: -15px;
+    border-left: 15px solid transparent;
+    border-right: none; 
+}
+.ticker-content-wrapper ul.owl-carousel li a {
+    padding-right: 15px;
+    padding-left: 0;
+}
+.ticker-content-wrapper .owl-carousel .owl-nav [class*="owl-"] {
+    right: auto;
+    left: 0;
+}
+.ghumti-ticker-wrapper .ticker-content-wrapper {
+    float: left;
+}
+.ghumti-logo-right-section-wrapper,
+.ghumti-header-menu-block-wrap .ghumti-header-search-wrapper {
+    text-align: left;
+}
+.ghumti-logo-right-section-wrapper .wishlist-box,
+.ghumti-logo-right-section-wrapper .cart-box {
+    margin-left: 0;
+}
+.main-navigation ul li {
+    float: right;
+}
+.main-navigation ul.nav-menu > li:first-child > a {
+    padding-left: 25px;
+    padding-right: 0;
+}
+.ghumti_featured_slider .ghumti-slider-featured .slider-posts {
+    float: right;
+    padding-left: 30px;
+    padding-right: 0;
+}
+.ghumti_special_product .ghumti-sale-slide li a.item-img {
+    float: right;
+    overflow: hidden;
+}
+.ghumti_special_product .ghumti-sale-slide li .item-content-wrap {
+    padding-left: 0;
+    padding-right: 30px;
+}
+.ghumti-sale-slide .item-content-wrap .price del {
+    margin-left: 0;
+    margin-right: 20px;
+}
+.ghumti_special_product .item-content-wrap .fl-pcountdown-cnt ul li {
+    margin-right: 0;
+    margin-left: 10px;
+}
+.ghumti_block_posts .ghumti-single-post .ghumti-post-thumb .posted-on {
+    left: unset;
+}
+.ghumti-post-content .comments-link {
+    float: left;
+}
+.ghumti_block_posts .ghumti-single-post {
+    margin-left: 2.5%;
+    margin-right: 0;
+}
+.ghumti_block_posts .ghumti-single-post:nth-child(3n) {
+    margin-left: 0;
+}
+.ghumti-single-post a.ghumti-read-more, .ghumti-button {
+    padding: 5px 0 5px 25px;
+}
+.ghumti-single-post a.ghumti-read-more:after {
+    left: 0;
+    right: unset;
+    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    -o-transform: rotateY(180deg);
+}
+.product .price del span.amount {
+    padding-right: 10px;
+    padding-left: 0;
+}
+.widget_archive ul li:before, .widget_categories ul li:before, .widget_recent_entries ul li:before, .widget_recent_comments ul li:before, .widget_meta ul li:before, .widget_pages ul li:before, .widget_nav_menu ul li:before, .widget_product_categories ul li:before {
+    left: unset;
+    right: 0;
+    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    -o-transform: rotateY(180deg);
+}
+.widget_archive ul li, .widget_categories ul li, .widget_recent_entries ul li, .widget_recent_comments ul li, .widget_meta ul li, .widget_pages ul li, .widget_rss ul li, .widget_nav_menu ul li, .widget_product_categories ul li {
+    padding-right: 20px;
+    padding-left: 0;
+}
+.main-footer .footer-navigation ul li:first-child a {
+    padding-right: 0;
+    padding-left: 20px;
+}
+.main-footer .footer-navigation ul li a {
+    border-right: none;
+    border-left: 1px solid;
+}
+.main-footer .footer-navigation ul li:last-child a {
+    padding-left: 0;
+    padding-right: 20px;
+    border-left: none;
+}
+.ghumti-header-search-wrapper .search-form-main,
+.my-account .welcome-user,
+.cart-box .woocommerce.widget_shopping_cart {
+    left: 0;
+    right: unset;
+}
+.main-navigation ul li ul {
+    right: 0;
+    left: unset;
+}
+.woocommerce ul.products li.product span.onsale {
+    -webkit-transform: rotate(405deg);
+    -moz-transform: rotate(405deg);
+    -o-transform: rotate(405deg);
+    transform: rotate(405deg);
+    top: -35px;
+    right: -60px;
+    left: unset;
+    padding: 0 0 0 10px;
+}
+span.onsale, .woocommerce span.onsale, #yith-quick-view-content .onsale {
+    -webkit-transform: rotate(405deg);
+    -moz-transform: rotate(405deg);
+    -o-transform: rotate(405deg);
+    transform: rotate(405deg);
+    right: -60px;
+    padding: 0 0 0 10px;
+    left: unset;
+}
+.single-product .entry-summary .product_meta > span a {
+    margin-left: 0;
+    margin-right: 10px;
+}
+.entry-meta > span {
+    margin-right: 0;
+    margin-left: 20px;
+    border-right: none;
+    border-left: 1px solid;
+    padding-right: 0;
+    padding-left: 20px;
+}
+.ghumti-button .fa {
+    position: absolute;
+    top: 3px;
+    right: unset;
+    font-size: 1.5em;
+    left: 0;
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+}

@@ -1,0 +1,529 @@
+<?php require_once('../Connections/dbconnect-m.php');  
+
+if(!isset($_SESSION['MM_UserGroup'])) 
+    { 
+        header("location:../logout.php");
+    }
+	
+?>
+<?php
+$police_tracking->select_db("ftcaaazc_epfts");
+$a='SP';
+$stmt = $police_tracking->prepare("SELECT id,branch_name,city FROM branch_tbl WHERE designation = ?");
+$stmt->bind_param("s", $a);
+$stmt->execute();
+$stmt->store_result();
+//if($stmt->num_rows === 0) exit('No rows');
+$stmt->bind_result($id,$branch_name,$city); 
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="robots" content="noindex" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Format-10 | File Tracking & Crime Analysis Application </title>
+<!-- GLOBAL STYLES -->
+<link rel="stylesheet" href="../assets/plugins/bootstrap/css/bootstrap.css" />
+<link rel="stylesheet" href="../assets/css/main.css" />
+<link rel="stylesheet" href="../assets/css/theme.css" />
+<link rel="stylesheet" href="../assets/css/MoneAdmin.css" />
+<link rel="stylesheet" href="../assets/plugins/Font-Awesome/css/font-awesome.css" />
+<link rel="stylesheet" type="text/css" href="../assets/css/autocom.css" />
+<!--END GLOBAL STYLES -->
+
+<!-- PAGE LEVEL STYLES -->
+<link href="../assets/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/plugins/datepicker/css/datepicker.css" />
+<link rel="stylesheet" href="../assets/plugins/validationengine/css/validationEngine.jquery.css" />
+<!-- END PAGE LEVEL  STYLES -->
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+<style media='all'>
+body {
+	font-size:12px;
+}
+.notice_all {
+	min-height:600px;
+	width:900px;
+	margin:0 auto;
+	/*border:dotted 1px #666;*/
+	position:relative;
+}
+#print tr td {
+	vertical-align:top
+}
+</style>
+<style media='print'>
+.navStuff {
+	display: none
+}
+.mar10 {
+	margin-top:-10px
+}
+</style>
+</head>
+
+<body style="background:#FFF">
+<div align='right' class='navStuff container'>
+    <form action="exporttoexcel.php" method="post" 
+onsubmit='$("#datatodisplay").val( $("<div>").append( $("#download").eq(0).clone() ).html() )'>  
+<p align="" class="hprtbtn">
+<span style="float:right;margin-right:-25px"> <input type="hidden" id="datatodisplay" name="datatodisplay" style="" /> <input type="submit" value="Export to Excel" class="btn btn-warning"/>
+  <input type='button' value='Print this page' onClick='window.print()' class="btn btn-warning">   </span></p></form>
+ </div>
+ <div class="row">
+    <div class="col-lg-12 label-primary" style="color:#FFF">
+      <form action="format10.php" method="post" name="Search" enctype="multipart/form-data" id="popup-validation" role="form">
+              
+        <div class="col-lg-12 navStuff" style="padding:15px 5px;margin:0px auto;width:960px;">    
+        <div class="col-lg-12 navStuff">  &nbsp; 
+         <label>दिनांक:</label>
+          <input name="datef"  id="dp26" type="text" class="form-control  validate[required] text-input"  autocomplete="off" style="width:130px; display:inline-block" value="<?php echo isset($_POST['datef']) ? $_POST['datef'] : '' ?>" readonly="readonly" />
+          &nbsp;से&nbsp;
+          <label>दिनांक:</label>
+          <input name="datel"  id="dp27" type="text" class="form-control validate[required] text-input"  autocomplete="off" style="width:130px; display:inline-block" value="<?php echo isset($_POST['datel']) ? $_POST['datel'] : '' ?>" readonly="readonly" />
+          &nbsp; तक  &nbsp;&nbsp;
+
+  <select name="sp_office" id="sp_office" class="validate[required] text-input form-control" style="display:inline-block;width:220px;">
+    <?php 
+	$stmt_jila = $police_tracking->prepare("SELECT id,branch_name,city FROM branch_tbl where id = ?");
+    $stmt_jila->bind_param("s", $_POST['sp_office']);
+    $stmt_jila->execute();
+    $stmt_jila->store_result();
+    //if($stmt_jila->num_rows === 0) exit('No rows');
+    $stmt_jila->bind_result($branch_id_jila, $branch_name_jila, $city_jila);
+    $stmt_jila->fetch();
+	$stmt_jila->close();
+	$jila = $branch_name_jila.",".$city_jila ;
+    ?>
+	<option value="<?php echo $branch_id_jila ;?>"><?php echo isset($_POST['sp_office']) ? $jila : '' ?></option>  
+  <option value="0"></option>
+  <?php
+   //do { 
+  while ($stmt->fetch()) 
+  {   
+  ?>
+  <option value="<?php echo $id;//echo $get_sql_data['id']?>"><?php echo $branch_name;//echo $get_sql_data['branch_name']?>, <?php echo $city;//echo $get_sql_data['city']?></option>
+  <?php
+  /*
+  } while ($get_sql_data = mysql_fetch_assoc($get_sql));
+  $rows = mysql_num_rows($get_sql);
+  if($rows > 0) {
+      mysql_data_seek($get_sql, 0);
+	  $get_sql_data = mysql_fetch_assoc($get_sql);
+  }
+  */
+   }
+   $stmt->close(); //id,branch_name,city FROM branch_tbl close
+  ?>
+  </select>
+                      
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <button type="submit" class="btn btn-success" id="mybutton" name="Search" style="display:inline-block">Search</button>
+        </div>
+      </form>
+    </div>
+  </div>
+<div class="notice_all">
+  <div class="clearfix"></div>
+  <br />
+  <div id="download">
+  <?php
+	 if(isset($_POST['Search'])!='')
+     {
+  ?>
+  <p align="left" style="float:left;margin-left:-30px;">Format -10</p>
+  <p align="right"></p>
+  <div class="mar10">
+  <?php
+    if($_POST['sp_office'] != 0)	
+	{
+    $stmt1 = $police_tracking->prepare("SELECT id,branch_name,city FROM branch_tbl WHERE id = ?");
+    $stmt1->bind_param("i", $_POST['sp_office']);
+	}
+	else
+	{ 
+	$sp='SP';
+	$stmt1 = $police_tracking->prepare("SELECT id,branch_name,city FROM branch_tbl where designation = ?");
+    $stmt1->bind_param("s", $sp);
+	}
+    $stmt1->execute();
+    $stmt1->store_result();
+    //if($stmt1->num_rows === 0) exit('No rows');
+    $stmt1->bind_result($branch_id, $branch_name, $city);
+ ?>
+    <p align="center"><span>पुलिस कर्मचारियों द्वारा घटित अपराध दि <?php if ($_POST['datef'] == ''){	echo '';} else{echo date('d-m-Y', strtotime($_POST['datef']));
+}?> से दि. <?php if ($_POST['datel'] == ''){echo '';} else{echo date('d-m-Y', strtotime($_POST['datel']));}?> इन्दौर जोन</span></p>
+      
+    <table border="1" cellspacing="0" cellpadding="0" style="text-align:center;border-collapse:collapse !mportant;" id="print" width="960px" class="table table-striped table-bordered table-hover">
+      <tr>
+        <td width="100px">जिला</td>
+        <td width="200px">कर्मचारियों के नाम</td>
+        <td width="100px">पद</td>
+        <td width="80px">अपराध क्रमांक</td>
+        <td width="100px">थाना</td>
+        <td width="250px">अपराध का विवरण</td>
+      </tr>
+    <?php 
+	/*
+	$j=0;
+	mysql_select_db($database_police_tracking, $police_tracking);
+    $query_Recordset1 = "SELECT branch_name, city from branch_tbl where designation = 'SP'";
+    //$query_Recordset1 = "SELECT * FROM new_entry where user_id ='".$_POST['sp_office']."' and status ='लंबित'";
+    $Recordset1 = mysql_query($query_Recordset1, $police_dsr) or die(mysql_error());
+    $row_Recordset1 = mysql_fetch_assoc($Recordset1);
+    $totalRows_Recordset1 = mysql_num_rows($Recordset1);
+    //echo $query_Recordset1;
+    */
+	$j=0;	 
+	while($stmt1->fetch())
+	{
+	  $idcheck = $branch_id;
+      $j++;
+	?>
+      <tr>
+	  
+        <td width="100px"><?php echo $branch_name; //echo $row_Recordset1['branch_name'] ;?>, <?php echo $city; //echo $row_Recordset1['city'] ;?></td> 
+		
+		<td colspan="5"> 
+          
+		 <table border="1" cellspacing="0" cellpadding="0" style="font-size:12px;line-height:20px;text-align:center;border-spacing: 0px;border-collapse:collapse;margin:-1px -1px -1px -1px" id="print2" width="100%">
+		 
+		 <?php
+		 $police_dsr->select_db("ftcaaazc_dsr");
+		 $police_karmachari = 'पुलिस कर्मचारी' ;	
+		 
+		 //$stmt2 = $police_dsr->prepare("SELECT dsr_id FROM criminal_list WHERE criminal_type = ?");		 		 
+		 if ( !$stmt2 = $police_dsr->prepare("SELECT dsr_id FROM criminal_list WHERE criminal_type = ? group by dsr_id") ) 
+         echo "Prepare Error: ($police_dsr->errno) $police_dsr->error";
+		 $stmt2->bind_param("s", $police_karmachari);			 
+		 $stmt2->execute();	
+         $stmt2->store_result();		 
+         //if($stmt2->num_rows === 0) { echo "No Results"; }
+         $stmt2->bind_result($cri_dsr_id_check); 
+         while ($stmt2->fetch()) 
+	     {	 
+         $cri_check_id = $cri_dsr_id_check;	
+		 ?>		 
+		 		 		 
+		 <?php
+		 $police_dsr->select_db("ftcaaazc_dsr");	 
+		 //$stmt3 = $police_dsr->prepare("SELECT criminal_list.criminal_name,criminal_list.dsr_id,criminal_list.sp_id,criminal_list.criminal_type,dsr_entries.id,dsr_entries.dsr_kaymi_date,dsr_entries.dsr_crime_no, dsr_entries.dsr_crime_year, dsr_entries.dsr_crime_details, dsr_entries.sp_id, dsr_entries.office_id FROM criminal_list INNER JOIN dsr_entries ON dsr_entries.id = criminal_list.dsr_id  WHERE dsr_entries.sp_id = ? AND dsr_entries.(dsr_kaymi_date >= ? and dsr_kaymi_date <= ?) AND criminal_list.criminal_type = ?");	 
+		 $stmt3 = $police_dsr->prepare("SELECT id, dsr_crime_no, dsr_crime_year, dsr_crime_details, sp_id, office_id FROM dsr_entries WHERE sp_id = ? AND (dsr_kaymi_date >= ? and dsr_kaymi_date <= ?) AND id = ?");		 		 
+		 $stmt3->bind_param("issi", $idcheck, $_POST['datef'], $_POST['datel'], $cri_check_id);		 
+		 $stmt3->execute();		        
+         $stmt3->store_result();		 
+         //if($stmt3->num_rows === 0) { echo "No Results"; }
+         $stmt3->bind_result($dsr_id_check, $dsr_crime_no, $dsr_crime_year, $dsr_crime_details, $dsr_sp_id, $dsr_office_id); 
+        
+		 while ($stmt3->fetch()) 
+	     {	 
+         $check_id = $dsr_id_check;	
+         $off_id_check = $dsr_office_id;
+		 ?>		 
+		 <tr>
+		  
+		  <td width="200px">
+		  <?php			  
+		  $stmt4 = $police_dsr->prepare("SELECT criminal_name FROM criminal_list WHERE dsr_id = ?");
+		  //if ( !$stmt2 = $police_dsr->prepare("SELECT criminal_list.criminal_name,criminal_list.dsr_id,criminal_list.sp_id,dsr_entries.id,dsr_entries.dsr_kaymi_date FROM criminal_list INNER JOIN dsr_entries ON criminal_list.dsr_id = dsr_entries.id WHERE criminal_list.sp_id = ? AND dsr_entries.(dsr_kaymi_date >= ? and dsr_kaymi_date <= ?) ") ) 
+          //echo "Prepare Error: ($police_dsr->errno) $police_dsr->error";	
+		  $stmt4->bind_param("i", $check_id);
+          $stmt4->execute();
+          $stmt4->store_result();
+          //if($stmt4->num_rows === 0) { echo "No Results"; }
+          $stmt4->bind_result($criminal_name); 
+          while ($stmt4->fetch()) 
+	      {	 				
+		  ?>
+		  <span><?php echo $criminal_name; ?> <br /></span>
+		  <?php 
+		  } $stmt4->close();
+		  ?>
+		  
+		  </td>
+		  
+		  <td width="100px">
+		  <?php
+		  //$stmt5 = $police_dsr->prepare("SELECT criminal_desig FROM criminal_list WHERE sp_id = ?");
+		  $stmt5= $police_dsr->prepare("SELECT criminal_desig FROM criminal_list WHERE dsr_id = ?");
+		  $stmt5->bind_param("i", $check_id);
+          $stmt5->execute();
+          $stmt5->store_result();
+          //if($stmt5->num_rows === 0) { echo "No Results"; }
+          $stmt5->bind_result($criminal_desig); 
+          while ($stmt5->fetch()) 
+	      {	 				
+		  ?>
+		  <span><?php echo $criminal_desig; ?> <br /></span>
+		  <?php 
+		  } $stmt5->close();
+		  ?>
+		  </td>
+		  
+		  <td width="80px"> <?php echo $dsr_crime_no; echo "/"; echo $dsr_crime_year; ?> </td>
+		  
+		  <td width="100px">
+		  <?php
+		  $police_tracking->select_db("ftcaaazc_epfts");
+		  if ( !$stmt6 = $police_tracking->prepare("SELECT branch_name FROM branch_tbl WHERE id = ? ") ) 
+          echo "Prepare Error: ($police_tracking->errno) $police_tracking->error";
+		  $stmt6->bind_param("i", $off_id_check);
+          $stmt6->execute();
+          $stmt6->store_result();
+          //if($stmt6->num_rows === 0) { echo "No Results"; }
+          $stmt6->bind_result($branch_tb_bn); 
+          while ($stmt6->fetch()) 
+	      {	  				
+		  ?>
+		  <span><?php  echo $branch_tb_bn; ?> <br /></span> 
+		  <?php 
+		  } $stmt6->close();
+		  ?>
+		  </td>
+		  
+		  <td width="250px"> <?php echo $dsr_crime_details; ?> </td>
+		  
+		 </tr>
+		 <?php 
+		 } $stmt3->close(); //stmt3 end here
+		 ?>
+		 
+		 <?php
+		 } $stmt2->close(); //stmt2 end here
+		 ?>
+		 </table>
+		</td>	      
+	  </tr>
+    
+	<?php 
+	 } //while stmt1 end
+     ?> 
+    
+	</table> 
+	
+	<br />
+	<br />
+	
+	<?php
+	//$result1=mysql_query("");
+    //$data1=mysql_fetch_assoc($result1);
+    if($_POST['sp_office'] != 0)	
+	{
+    $stmt7 = $police_tracking->prepare("SELECT id,branch_name,city FROM branch_tbl WHERE id = ?");
+    $stmt7->bind_param("i", $_POST['sp_office']);
+	}
+	else
+	{ 
+	$sp='SP';
+	$stmt7 = $police_tracking->prepare("SELECT id,branch_name,city FROM branch_tbl where designation = ?");
+    $stmt7->bind_param("s", $sp);
+	}
+    $stmt7->execute();
+    $stmt7->store_result();
+    //if($stmt7->num_rows === 0) exit('No rows');
+    $stmt7->bind_result($branch_id1, $branch_name1, $city1);
+  ?>
+    <p align="center"><span>शासकीय कर्मचारियों द्वारा घटित अपराध दि <?php if ($_POST['datef'] == ''){	echo '';} else{echo date('d-m-Y', strtotime($_POST['datef']));
+}?> से दि. <?php if ($_POST['datel'] == ''){echo '';} else{echo date('d-m-Y', strtotime($_POST['datel']));}?> इन्दौर जोन</span></p>
+    
+	<table border="1" cellspacing="0" cellpadding="0" style="text-align:center" id="print" width="960px" class="table table-striped table-bordered table-hover">
+      <tr>
+        <td width="100px">जिला</td>
+        <td width="200px">कर्मचारियों के नाम</td>
+        <td width="100px">पद</td>
+        <td width="80px">अपराध क्रमांक</td>
+        <td width="100px">थाना</td>
+        <td width="250px">अपराध का विवरण</td>
+      </tr>
+    <?php 
+	/*
+	$j=0;
+	mysql_select_db($database_police_tracking, $police_tracking);
+    $query_Recordset1 = "SELECT branch_name, city from branch_tbl where designation = 'SP'";
+    //$query_Recordset1 = "SELECT * FROM new_entry where user_id ='".$_POST['sp_office']."' and status ='लंबित'";
+    $Recordset1 = mysql_query($query_Recordset1, $police_dsr) or die(mysql_error());
+    $row_Recordset1 = mysql_fetch_assoc($Recordset1);
+    $totalRows_Recordset1 = mysql_num_rows($Recordset1);
+    //echo $query_Recordset1;
+    */
+	$j1=0;	 
+	while($stmt7->fetch())
+	{
+	  $idcheck1 = $branch_id1;
+      $j1++;
+	?>
+      <tr>
+        <td width="100px"><?php echo $branch_name1; //echo $row_Recordset1['branch_name'] ;?>, <?php echo $city1; //echo $row_Recordset1['city'] ;?></td>
+        
+		<td colspan="5"> 
+          
+		 <table border="1" cellspacing="0" cellpadding="0" style="font-size:12px;line-height:20px;text-align:center;border-spacing: 0px;border-collapse:collapse;margin:-1px -1px -1px -1px" id="print2" width="100%">
+		 
+		 <?php
+		 $police_dsr->select_db("ftcaaazc_dsr");
+		 $shaskiy_karmachari = 'शासकीय कर्मचारी';	
+		 		 
+		 if ( !$stmt8 = $police_dsr->prepare("SELECT dsr_id FROM criminal_list WHERE criminal_type = ? group by dsr_id") ) 
+         echo "Prepare Error: ($police_dsr->errno) $police_dsr->error";
+		 $stmt8->bind_param("s", $shaskiy_karmachari);			 
+		 $stmt8->execute();	
+         $stmt8->store_result();		 
+         //if($stmt8->num_rows === 0) { echo "No Results"; }
+         $stmt8->bind_result($cri_dsr_id_check); 
+         while ($stmt8->fetch()) 
+	     {	 
+         $cri_check_id1 = $cri_dsr_id_check;	
+		 ?>		 
+		 		 		 
+		 <?php
+		 $police_dsr->select_db("ftcaaazc_dsr");	  
+		 $stmt9 = $police_dsr->prepare("SELECT id, dsr_crime_no, dsr_crime_year, dsr_crime_details, sp_id, office_id FROM dsr_entries WHERE sp_id = ? AND (dsr_kaymi_date >= ? and dsr_kaymi_date <= ?) AND id = ?");		 		 
+		 $stmt9->bind_param("issi", $idcheck1, $_POST['datef'], $_POST['datel'], $cri_check_id1);		 
+		 $stmt9->execute();		        
+         $stmt9->store_result();		 
+         //if($stmt9->num_rows === 0) { echo "No Results"; }
+         $stmt9->bind_result($dsr_id_check, $dsr_crime_no, $dsr_crime_year, $dsr_crime_details, $dsr_sp_id, $dsr_office_id); 
+        
+		while ($stmt9->fetch()) 
+	     {	 
+         $check_id1 = $dsr_id_check;	
+         $off_id_check1 = $dsr_office_id;
+		 ?>		 
+		 <tr>
+		  
+		  <td width="200px">
+		  <?php			  
+		  $stmt10 = $police_dsr->prepare("SELECT criminal_name FROM criminal_list WHERE dsr_id = ?");
+		  $stmt10->bind_param("i", $check_id1);
+          $stmt10->execute();
+          $stmt10->store_result();
+          //if($stmt10->num_rows === 0) { echo "No Results"; }
+          $stmt10->bind_result($criminal_name); 
+          while ($stmt10->fetch()) 
+	      {	 				
+		  ?>
+		  <span><?php echo $criminal_name; ?> <br /></span>
+		  <?php 
+		  } $stmt10->close();
+		  ?>
+		  
+		  </td>
+		  
+		  <td width="100px">
+		  <?php
+		  $stmt11= $police_dsr->prepare("SELECT criminal_desig FROM criminal_list WHERE dsr_id = ?");
+		  $stmt11->bind_param("i", $check_id1);
+          $stmt11->execute();
+          $stmt11->store_result();
+          //if($stmt11->num_rows === 0) { echo "No Results"; }
+          $stmt11->bind_result($criminal_desig); 
+          while ($stmt11->fetch()) 
+	      {	 				
+		  ?>
+		  <span><?php echo $criminal_desig; ?> <br /></span>
+		  <?php 
+		  } $stmt11->close();
+		  ?>
+		  </td>
+		  
+		  <td width="80px"> <?php echo $dsr_crime_no; echo "/"; echo $dsr_crime_year; ?> </td>
+		  
+		  <td width="100px">
+		  <?php
+		  $police_tracking->select_db("ftcaaazc_epfts");
+		  if ( !$stmt12 = $police_tracking->prepare("SELECT branch_name FROM branch_tbl WHERE id = ? ") ) 
+          echo "Prepare Error: ($police_tracking->errno) $police_tracking->error";
+		  $stmt12->bind_param("i", $off_id_check1);
+          $stmt12->execute();
+          $stmt12->store_result();
+          //if($stmt12->num_rows === 0) { echo "No Results"; }
+          $stmt12->bind_result($branch_tb_bn); 
+          while ($stmt12->fetch()) 
+	      {	  				
+		  ?>
+		  <span><?php  echo $branch_tb_bn; ?> <br /></span> 
+		  <?php 
+		  } $stmt12->close();
+		  ?>
+		  </td>
+		  
+		  <td width="250px"> <?php echo $dsr_crime_details; ?> </td>
+		  
+		 </tr>
+		 <?php 
+		 } $stmt9->close(); //stmt9 end here
+		 ?>
+		 
+		 <?php
+		 } $stmt8->close(); //stmt8 end here
+		 ?>
+		 </table>
+		</td>	      
+	  </tr>
+    
+	<?php 
+	 } //while stmt7 end
+    ?> 
+    
+    </table> 
+    
+	<br /><br />
+    <br /><br />
+    <p style="float:right" align="center"></p>
+
+  </div>
+  <?php } //search query end ?>
+  </div>
+</div>
+<style>
+.break { page-break-before: always; }
+</style>
+<p class="break"></p>
+<!-- GLOBAL SCRIPTS --> 
+<script src="../assets/plugins/jquery-2.0.3.min.js"></script> 
+<script src="../assets/plugins/bootstrap/js/bootstrap.min.js"></script> 
+<script src="../assets/plugins/modernizr-2.6.2-respond-1.1.0.min.js"></script> 
+<!-- END GLOBAL SCRIPTS --> 
+<!-- PAGE LEVEL SCRIPTS --> 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
+<script src="../assets/js/progressbar.js"></script> 
+<script src="../assets/plugins/dataTables/jquery.dataTables.js"></script> 
+<script src="../assets/plugins/dataTables/dataTables.bootstrap.js"></script> 
+ 
+<script>
+         $(document).ready(function () {
+             $('#dataTables-example').dataTable();
+         });
+    </script> 
+ 
+<!-- END PAGE LEVEL SCRIPTS --> 
+<script type="text/javascript" src="../assets/js/multirow.js"></script> 
+<script src="../assets/plugins/validationengine/js/jquery.validationEngine.js"></script> 
+<script src="../assets/plugins/validationengine/js/languages/jquery.validationEngine-en.js"></script> 
+<script src="../assets/plugins/jquery-validation-1.11.1/dist/jquery.validate.min.js"></script> 
+<script src="../assets/js/validationInit.js"></script> 
+<script>
+        $(function () { formValidation(); });
+        </script> 
+<script src="../assets/js/formsInit.js"></script> 
+<script>
+            $(function () { formInit(); });
+        </script> 
+
+<script src="../assets/js/jquery-ui.min.js"></script> 
+<script src="../assets/plugins/uniform/jquery.uniform.min.js"></script> 
+<script src="../assets/plugins/inputlimiter/jquery.inputlimiter.1.3.1.min.js"></script> 
+<script src="../assets/plugins/chosen/chosen.jquery.min.js"></script> 
+<script src="../assets/plugins/colorpicker/js/bootstrap-colorpicker.js"></script> 
+<script src="../assets/plugins/tagsinput/jquery.tagsinput.min.js"></script> 
+<script src="../assets/plugins/validVal/js/jquery.validVal.min.js"></script> 
+<script src="../assets/plugins/datepicker/js/bootstrap-datepicker.js"></script> 
+<script src="../assets/plugins/autosize/jquery.autosize.min.js"></script>
+</body>
+</html>
